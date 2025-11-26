@@ -13,7 +13,7 @@ public class ProductoResponse {
 
     private Long id;
     private String name;
-    private Long price;
+    private Double price;
 
     private List<Long> pedidosIds;
 }

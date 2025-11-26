@@ -19,11 +19,13 @@ public class Cliente {
 
     @Column(nullable = false)
     @NotBlank(message = "El nombre del cliente no puede estar vacío.")
+    @jakarta.validation.constraints.Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$", message = "El nombre solo puede contener letras y espacios, sin números ni símbolos.")
     private String name;
 
     @Column(nullable = false, unique = true)
-    @Email(message = "El email debe ser válido.")
     @NotBlank(message = "El email no puede estar vacío.")
+    @Email(message = "El email debe ser válido.")
+    @jakarta.validation.constraints.Pattern(regexp = "^[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9]@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", message = "El email debe tener un formato válido.")
     private String email;
 
     // Relación con pedidos

@@ -21,12 +21,14 @@ public class Producto {
     private Long id;
 
     @NotBlank(message = "El nombre del producto no puede estar vacío.")
-    @Size(max = 100, message = "El nombre no puede superar los 100 caracteres.")
+    @Size(max = 50, message = "El nombre no puede superar los 50 caracteres.")
     @Column(nullable = false, unique = true)
     private String name;
 
     @Column(nullable = false)
-    private Long price;
+    @jakarta.validation.constraints.Positive(message = "El precio debe ser mayor a 0.")
+    @jakarta.validation.constraints.Max(value = 99999, message = "El precio no puede superar los 99999.")
+    private Double price;
 
     @OneToMany(mappedBy = "producto")
     private List<PedidoProducto> pedidos = new ArrayList<>();

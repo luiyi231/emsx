@@ -33,7 +33,8 @@ public class AuthController {
      * Endpoint: POST /api/auth/register
      */
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<AuthenticationResponse> register(
+            @RequestBody @jakarta.validation.Valid RegisterRequest request) {
         return ResponseEntity.ok(authService.register(request));
     }
 

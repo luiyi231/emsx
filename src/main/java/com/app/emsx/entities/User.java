@@ -30,12 +30,19 @@ public class User implements UserDetails {
     private Long id;
 
     @Column(nullable = false)
+    @jakarta.validation.constraints.NotBlank(message = "El nombre no puede estar vacío.")
+    @jakarta.validation.constraints.Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$", message = "El nombre solo puede contener letras y espacios, sin números ni símbolos.")
     private String firstname;
 
     @Column(nullable = false)
+    @jakarta.validation.constraints.NotBlank(message = "El apellido no puede estar vacío.")
+    @jakarta.validation.constraints.Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$", message = "El apellido solo puede contener letras y espacios, sin números ni símbolos.")
     private String lastname;
 
     @Column(nullable = false, unique = true)
+    @jakarta.validation.constraints.NotBlank(message = "El email no puede estar vacío.")
+    @jakarta.validation.constraints.Email(message = "El email debe ser válido.")
+    @jakarta.validation.constraints.Pattern(regexp = "^[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9]@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", message = "El email debe tener un formato válido.")
     private String email;
 
     @Column(nullable = false)

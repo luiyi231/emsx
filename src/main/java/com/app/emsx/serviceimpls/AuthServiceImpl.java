@@ -23,70 +23,70 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthServiceImpl {
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
-    private final AuthenticationManager authenticationManager;
+        private final UserRepository userRepository;
+        private final PasswordEncoder passwordEncoder;
+        private final JwtService jwtService;
+        private final AuthenticationManager authenticationManager;
 
-    /**
-     * ✅ Registrar un nuevo usuario (modo desarrollo con defaults)
-     */
-    public AuthenticationResponse register(RegisterRequest request) {
-        User user = new User();
+        /**
+         * ✅ Registrar un nuevo usuario (modo desarrollo con defaults)
+         */
+        public AuthenticationResponse register(RegisterRequest request) {
+                if (userRepository.existsByEmail(request.getEmail())) {
+                        throw new com.app.emsx.exceptions.BusinessRuleException("El email ya está registrado.");
+                }
 
-        // Evitar errores de null en firstname / lastname
-        user.setFirstname(
-                request.getFirstname() != null && !request.getFirstname().isBlank()
-                        ? request.getFirstname()
-                        : "User"
-        );
-        user.setLastname(
-                request.getLastname() != null && !request.getLastname().isBlank()
-                        ? request.getLastname()
-                        : "Default"
-        );
+                User user = new User();
 
-        user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole("ROLE_ADMIN"); // Temporal para desarrollo
+                // Evitar errores de null en firstname / lastname
+                user.setFirstname(
+                                request.getFirstname() != null && !request.getFirstname().isBlank()
+                                                ? request.getFirstname()
+                                                : "User");
+                user.setLastname(
+                                request.getLastname() != null && !request.getLastname().isBlank()
+                                                ? request.getLastname()
+                                                : "Default");
 
-        userRepository.save(user);
+                user.setEmail(request.getEmail());
+                user.setPassword(passwordEncoder.encode(request.getPassword()));
+                user.setRole("ROLE_ADMIN"); // Temporal para desarrollo
 
-        String jwtToken = jwtService.generateToken(user);
+                userRepository.save(user);
 
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .userId(user.getId())
-                .email(user.getEmail())
-                .firstname(user.getFirstname())
-                .lastname(user.getLastname())
-                .role(user.getRole())
-                .build();
-    }
+                String jwtToken = jwtService.generateToken(user);
 
-    /**
-     * ✅ Autenticar usuario existente
-     */
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
-        );
+                return AuthenticationResponse.builder()
+                                .token(jwtToken)
+                                .userId(user.getId())
+                                .email(user.getEmail())
+                                .firstname(user.getFirstname())
+                                .lastname(user.getLastname())
+                                .role(user.getRole())
+                                .build();
+        }
 
-        User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("❌ Usuario no encontrado"));
+        /**
+         * ✅ Autenticar usuario existente
+         */
+        public AuthenticationResponse authenticate(AuthenticationRequest request) {
+                authenticationManager.authenticate(
+                                new UsernamePasswordAuthenticationToken(
+                                                request.getEmail(),
+                                                request.getPassword()));
 
-        String jwtToken = jwtService.generateToken(user);
+                User user = userRepository.findByEmail(request.getEmail())
+                                .orElseThrow(() -> new RuntimeException("❌ Usuario no encontrado"));
 
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .userId(user.getId())
-                .email(user.getEmail())
-                .firstname(user.getFirstname())
-                .lastname(user.getLastname())
-                .role(user.getRole())
-                .build();
-    }
+                String jwtToken = jwtService.generateToken(user);
+
+                return AuthenticationResponse.builder()
+                                .token(jwtToken)
+                                .userId(user.getId())
+                                .email(user.getEmail())
+                                .firstname(user.getFirstname())
+                                .lastname(user.getLastname())
+                                .role(user.getRole())
+                                .build();
+        }
 }

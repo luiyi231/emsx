@@ -14,7 +14,8 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class FacturaRequest {
+public class
+FacturaRequest {
     @PastOrPresent(message = "La fecha no puede ser del futuro.")
     @NotNull(message = "La fecha es obligatoria.")
     private Date fecha;

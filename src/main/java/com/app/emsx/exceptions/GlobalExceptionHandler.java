@@ -84,4 +84,18 @@ public class GlobalExceptionHandler {
                         .timestamp(LocalDateTime.now())
                         .build());
     }
+
+    /**
+     * 🛑 Error de integridad de datos (409)
+     * Ejemplo: intentar eliminar un registro que tiene referencias en otra tabla
+     * (FK constraint)
+     */
+    @ExceptionHandler(org.springframework.dao.DataIntegrityViolationException.class)
+    public ResponseEntity<ApiResponse<Void>> handleDataIntegrityViolation(
+            org.springframework.dao.DataIntegrityViolationException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(ApiResponse.fail(
+                        "No se puede eliminar o modificar porque tiene datos relacionados (ej. pedidos, facturas)."));
+    }
 }

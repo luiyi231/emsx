@@ -13,6 +13,7 @@ import com.app.emsx.repositories.ClienteRepository;
 import com.app.emsx.repositories.PedidoRepository;
 import com.app.emsx.repositories.ProductoRepository;
 import com.app.emsx.services.PedidoService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@org.springframework.transaction.annotation.Transactional
+@Transactional
 public class PedidoServiceImpl implements PedidoService {
 
     private final PedidoRepository pedidoRepository;
